@@ -1,0 +1,38 @@
+# action.yml — Registers this repo as a reusable GitHub Action
+#
+# Other repos reference this action in their workflow files like:
+#   uses: AbacusAnalytics/code-review-agent@v1
+#
+# This file defines what inputs the action accepts and what it runs.
+
+name: 'Abacus AI Code Review'
+description: 'AI-powered code review using Claude for .NET/Blazor/Azure projects'
+author: 'Abacus Analytics'
+
+inputs:
+  github-token:
+    description: 'GitHub token for PR access (usually secrets.GITHUB_TOKEN)'
+    required: true
+  claude-api-key:
+    description: 'Anthropic API key for Claude'
+    required: true
+  jira-base-url:
+    description: 'Your Jira instance URL (e.g., https://yourcompany.atlassian.net)'
+    required: false
+    default: ''
+  jira-email:
+    description: 'Jira service account email'
+    required: false
+    default: ''
+  jira-api-token:
+    description: 'Jira API token'
+    required: false
+    default: ''
+  config-path:
+    description: 'Path to .code-review.yml in the repo (relative to root)'
+    required: false
+    default: '.code-review.yml'
+
+runs:
+  using: 'node20'
+  main: 'src/index.js'

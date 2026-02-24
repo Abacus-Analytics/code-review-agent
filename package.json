@@ -1,0 +1,19 @@
+{
+  "name": "abacus-code-review-agent",
+  "version": "1.0.0",
+  "description": "AI-powered code review for .NET/Blazor/Azure using Claude Sonnet 4.5",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test/guardrail-tests.js",
+    "lint": "node -c src/*.js"
+  },
+  "keywords": ["code-review", "ai", "claude", "github-action", "dotnet", "blazor"],
+  "author": "Abacus Analytics",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@octokit/rest": "^22.0.1",
+    "js-yaml": "^4.1.1"
+  }
+}

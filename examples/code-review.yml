@@ -1,0 +1,74 @@
+# .code-review.yml — Drop this file in the root of any repo to enable AI code review.
+#
+# QUICK START:
+#   1. Copy this file to your repo root as ".code-review.yml"
+#   2. Start with mode: manual and jira_enabled: false
+#   3. Type /review on any PR to test
+#   4. Once you trust the results, change mode to automatic
+#
+# ── Mode ────────────────────────────────────────────
+# manual    → Agent only runs when you type /review on a PR
+# automatic → Agent runs on every PR to main/develop
+mode: manual
+
+# ── Jira ────────────────────────────────────────────
+# Set to true when you're ready for the agent to update Jira tickets
+jira_enabled: false
+jira:
+  project_key: "ABACUS"
+  transition_on_approve: "TESTING"
+  comment_on_reject: true
+
+# ── Guardrails ──────────────────────────────────────
+guardrails:
+
+  # Category-level severity (options: blocking, warning, suggestion, ignore)
+  severity:
+    security: blocking
+    bugs: blocking
+    performance: warning
+    architecture: warning
+    code_quality: suggestion
+
+  # These specific checks are ALWAYS blocking, regardless of category
+  always_block:
+    - "sql-injection"
+    - "secrets-in-code"
+    - "missing-authorize-attribute"
+    - "async-void"
+
+  # Checks to skip entirely (too noisy, not relevant, etc.)
+  ignore: []
+    # - "missing-xml-docs"
+    # - "magic-numbers"
+
+  # Your team's custom rules (written in plain English)
+  custom_rules: []
+    # - text: "All API controllers must inherit from AbacusBaseController"
+    #   severity: blocking
+    # - text: "Use ILogger<T> for logging, never Console.WriteLine"
+    #   severity: warning
+
+  # What it takes to approve
+  approval:
+    block_on: blocking
+    auto_approve_suggestions_only: true
+    max_warnings_before_block: 5
+
+# ── File Filters ────────────────────────────────────
+files:
+  # Files to skip (glob patterns)
+  ignore:
+    - "**/*.Designer.cs"
+    - "Migrations/**"
+    - "wwwroot/lib/**"
+    - "**/*.min.js"
+    - "**/*.min.css"
+    - "**/*.g.cs"
+    - "**/bin/**"
+    - "**/obj/**"
+
+  # Files to always include for context (even if not in the diff)
+  always_include_for_context: []
+    # - "src/**/Interfaces/**"
+    # - "src/**/Models/**"

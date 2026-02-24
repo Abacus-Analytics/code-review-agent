@@ -1,0 +1,48 @@
+# .github/workflows/code-review.yml
+#
+# Copy this file to .github/workflows/code-review.yml in any repo
+# you want the AI code review agent to work on.
+#
+# MODE 1 & 2: Type /review on any PR to trigger a review
+# MODE 3: Also triggers automatically when a PR is opened or updated
+#
+# The mode is controlled by .code-review.yml in the repo root,
+# NOT by this file. You don't need to edit this file.
+
+name: AI Code Review
+
+on:
+  # Listens for /review comments on PRs (Mode 1, 2, and 3)
+  issue_comment:
+    types: [created]
+
+  # Triggers on PR open/update (Mode 3 only — the agent checks
+  # the mode setting and skips if mode is "manual")
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    # Only run if:
+    # - Someone typed /review on a PR, OR
+    # - A PR was opened/updated targeting main or develop
+    if: >
+      (github.event_name == 'issue_comment' &&
+       contains(github.event.comment.body, '/review') &&
+       github.event.issue.pull_request) ||
+      github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: AI Code Review
+        uses: AbacusAnalytics/code-review-agent@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-email: ${{ secrets.JIRA_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
